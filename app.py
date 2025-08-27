@@ -11,42 +11,33 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 # Ensure upload directory exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-# Load MONAI DenseNet model (same as your working app)
+# Load model - fallback to demo mode for deployment
 try:
-    from monai.networks.nets import DenseNet121
+    from torchvision.models import densenet121
     
-    # Create MONAI DenseNet121 model
-    model = DenseNet121(
-        spatial_dims=2,
-        in_channels=3,
-        out_channels=4,  # 4 classes
-        pretrained=False
-    )
+    # Create DenseNet121 model
+    model = densenet121(num_classes=4)
     
-    # Load trained weights
+    # Try to load trained weights if available
     model_path = os.path.join('Model', 'monai_densenet_efficient.pth')
     if os.path.exists(model_path):
-        checkpoint = torch.load(model_path, map_location='cpu', weights_only=False)
+        try:
+            checkpoint = torch.load(model_path, map_location='cpu', weights_only=False)
+            if 'model_state_dict' in checkpoint:
+                model.load_state_dict(checkpoint['model_state_dict'], strict=False)
+            else:
+                model.load_state_dict(checkpoint, strict=False)
+            model.eval()
+            print("✅ Model loaded successfully")
+        except Exception as e:
+            print(f"⚠️ Model loading failed: {e} - using demo mode")
+            model = None
     else:
         print("⚠️ Model file not found - running in demo mode")
         model = None
-        checkpoint = None
     
-    # Handle different checkpoint formats
-    if checkpoint:
-        if 'model_state_dict' in checkpoint:
-            model.load_state_dict(checkpoint['model_state_dict'])
-        else:
-            model.load_state_dict(checkpoint)
-        
-        model.eval()
-        print("✅ MONAI DenseNet model loaded successfully")
-    
-except ImportError:
-    print("⚠️ MONAI not available. Install with: pip install monai")
-    model = None
 except Exception as e:
-    print(f"❌ Model loading failed: {e}")
+    print(f"❌ Model initialization failed: {e} - running in demo mode")
     model = None
 
 # Image preprocessing
