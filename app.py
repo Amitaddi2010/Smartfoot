@@ -24,17 +24,23 @@ try:
     )
     
     # Load trained weights
-    checkpoint = torch.load(r'D:\Amit Data\Amit data\Foot Deformities Detection\Model\monai_densenet_efficient.pth', 
-                           map_location='cpu', weights_only=False)
+    model_path = os.path.join('Model', 'monai_densenet_efficient.pth')
+    if os.path.exists(model_path):
+        checkpoint = torch.load(model_path, map_location='cpu', weights_only=False)
+    else:
+        print("⚠️ Model file not found - running in demo mode")
+        model = None
+        checkpoint = None
     
     # Handle different checkpoint formats
-    if 'model_state_dict' in checkpoint:
-        model.load_state_dict(checkpoint['model_state_dict'])
-    else:
-        model.load_state_dict(checkpoint)
-    
-    model.eval()
-    print("✅ MONAI DenseNet model loaded successfully")
+    if checkpoint:
+        if 'model_state_dict' in checkpoint:
+            model.load_state_dict(checkpoint['model_state_dict'])
+        else:
+            model.load_state_dict(checkpoint)
+        
+        model.eval()
+        print("✅ MONAI DenseNet model loaded successfully")
     
 except ImportError:
     print("⚠️ MONAI not available. Install with: pip install monai")
@@ -117,4 +123,5 @@ def upload_file():
         return jsonify({'result': result, 'filename': filename})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)

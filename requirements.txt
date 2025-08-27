@@ -4,3 +4,4 @@ torchvision==0.15.2
 Pillow>=10.0.1
 numpy>=1.26.4
 monai
+gunicorn==21.2.0
