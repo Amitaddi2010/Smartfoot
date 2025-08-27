@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartFoot AI - Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #8B5CF6 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .nav {
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .docs-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+        
+        .sidebar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+        
+        .sidebar h3 {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 0.5rem;
+            display: block;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #e0e7ff;
+        }
+        
+        .section h3 {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 0.5rem 0;
+            color: #c7d2fe;
+        }
+        
+        .section p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .feature-card h4 {
+            color: #e0e7ff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .api-endpoint {
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .method {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .docs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/">← Back to SmartFoot</a>
+    </nav>
+    
+    <div class="container">
+        <div class="header">
+            <h1>📚 SmartFoot AI Documentation</h1>
+            <p>Complete guide to using SmartFoot AI for foot condition analysis</p>
+        </div>
+        
+        <div class="docs-grid">
+            <div class="sidebar">
+                <h3>📋 Contents</h3>
+                <ul>
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#conditions">Conditions</a></li>
+                    <li><a href="#usage">How to Use</a></li>
+                    <li><a href="#api">API Reference</a></li>
+                    <li><a href="#technical">Technical Details</a></li>
+                    <li><a href="#limitations">Limitations</a></li>
+                </ul>
+            </div>
+            
+            <div class="content">
+                <section id="overview" class="section">
+                    <h2>🔍 Overview</h2>
+                    <p>SmartFoot AI is an advanced machine learning system designed to analyze foot images and detect various foot conditions using deep learning technology.</p>
+                    
+                    <p>Built with MONAI DenseNet121 architecture, our system provides accurate classification of foot conditions with confidence scores to assist healthcare professionals in diagnosis.</p>
+                </section>
+                
+                <section id="features" class="section">
+                    <h2>✨ Features</h2>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>🤖 AI-Powered Analysis</h4>
+                            <p>Advanced deep learning model trained on medical foot images</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚡ Real-time Processing</h4>
+                            <p>Fast analysis with results in seconds</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📊 Confidence Scoring</h4>
+                            <p>Provides confidence percentages for each prediction</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🎨 Modern Interface</h4>
+                            <p>Glassmorphism design with intuitive user experience</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="conditions" class="section">
+                    <h2>🦶 Detectable Conditions</h2>
+                    
+                    <h3>1. Normal Foot</h3>
+                    <p>Healthy foot structure with proper arch formation and no visible deformities.</p>
+                    
+                    <h3>2. Flatfoot (Pes Planus)</h3>
+                    <p>Condition where the arch of the foot collapses, causing the entire sole to come into contact with the ground.</p>
+                    
+                    <h3>3. Foot Ulcer</h3>
+                    <p>Open wounds or sores on the foot, commonly associated with diabetes or poor circulation.</p>
+                    
+                    <h3>4. Hallux Valgus (Bunion)</h3>
+                    <p>Deformity where the big toe deviates toward the other toes, creating a bony prominence.</p>
+                </section>
+                
+                <section id="usage" class="section">
+                    <h2>📖 How to Use</h2>
+                    
+                    <h3>Step 1: Upload Image</h3>
+                    <p>Click "Choose Image" or drag and drop a foot image into the upload area. Supported formats: JPG, PNG, BMP, TIFF.</p>
+                    
+                    <h3>Step 2: Preview</h3>
+                    <p>Review your uploaded image in the preview panel to ensure it's clear and properly oriented.</p>
+                    
+                    <h3>Step 3: Analyze</h3>
+                    <p>Click "Analyze Foot" to process the image through our AI model.</p>
+                    
+                    <h3>Step 4: Review Results</h3>
+                    <p>View the diagnosis and confidence score in the results panel.</p>
+                </section>
+                
+                <section id="api" class="section">
+                    <h2>🔌 API Reference</h2>
+                    
+                    <div class="api-endpoint">
+                        <span class="method">POST</span>
+                        <strong>/upload</strong>
+                        <p>Upload and analyze a foot image</p>
+                    </div>
+                    
+                    <h3>Request</h3>
+                    <div class="code-block">
+Content-Type: multipart/form-data
+Body: file (image file)
+                    </div>
+                    
+                    <h3>Response</h3>
+                    <div class="code-block">
+{
+  "result": "Diagnosis: Normal (Confidence: 95.2%)",
+  "filename": "foot_image.jpg"
+}
+                    </div>
+                </section>
+                
+                <section id="technical" class="section">
+                    <h2>⚙️ Technical Details</h2>
+                    
+                    <h3>Model Architecture</h3>
+                    <p>MONAI DenseNet121 with the following specifications:</p>
+                    <ul style="margin-left: 2rem; color: rgba(255,255,255,0.9);">
+                        <li>Input: 224x224 RGB images</li>
+                        <li>Output: 4 classes (Normal, Flatfoot, Foot Ulcer, Hallux Valgus)</li>
+                        <li>Preprocessing: Resize, normalize with ImageNet statistics</li>
+                    </ul>
+                    
+                    <h3>Technology Stack</h3>
+                    <div class="code-block">
+Backend: Flask + PyTorch + MONAI
+Frontend: HTML5 + CSS3 + JavaScript
+Model: DenseNet121 (Medical AI optimized)
+                    </div>
+                </section>
+                
+                <section id="limitations" class="section">
+                    <h2>⚠️ Important Limitations</h2>
+                    
+                    <p><strong>Medical Disclaimer:</strong> This tool is for educational and research purposes only. It should not replace professional medical diagnosis or treatment.</p>
+                    
+                    <ul style="margin-left: 2rem; color: rgba(255,255,255,0.9); line-height: 1.8;">
+                        <li>Always consult healthcare professionals for medical advice</li>
+                        <li>Image quality affects accuracy - use clear, well-lit photos</li>
+                        <li>Model trained on specific dataset - may not generalize to all cases</li>
+                        <li>Confidence scores are estimates, not certainties</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
