@@ -3,7 +3,6 @@ import os
 import torch
 from torchvision import transforms
 from PIL import Image
-import torch.nn.functional as F
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -11,12 +10,18 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 # Ensure upload directory exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-# Load model - fallback to demo mode for deployment
+# Load MONAI DenseNet model
 try:
-    from torchvision.models import densenet121
+    from monai.networks.nets import DenseNet121
+    import torch.nn.functional as F
     
-    # Create DenseNet121 model
-    model = densenet121(num_classes=4)
+    # Create MONAI DenseNet121 model
+    model = DenseNet121(
+        spatial_dims=2,
+        in_channels=3,
+        out_channels=4,  # 4 classes: Normal, Flatfoot, Foot Ulcer, Hallux Valgus
+        pretrained=False
+    )
     
     # Try to load trained weights if available
     model_path = os.path.join('Model', 'monai_densenet_efficient.pth')
@@ -24,11 +29,11 @@ try:
         try:
             checkpoint = torch.load(model_path, map_location='cpu', weights_only=False)
             if 'model_state_dict' in checkpoint:
-                model.load_state_dict(checkpoint['model_state_dict'], strict=False)
+                model.load_state_dict(checkpoint['model_state_dict'])
             else:
-                model.load_state_dict(checkpoint, strict=False)
+                model.load_state_dict(checkpoint)
             model.eval()
-            print("✅ Model loaded successfully")
+            print("✅ MONAI DenseNet model loaded successfully")
         except Exception as e:
             print(f"⚠️ Model loading failed: {e} - using demo mode")
             model = None
@@ -36,6 +41,9 @@ try:
         print("⚠️ Model file not found - running in demo mode")
         model = None
     
+except ImportError:
+    print("⚠️ MONAI not available - using demo mode")
+    model = None
 except Exception as e:
     print(f"❌ Model initialization failed: {e} - running in demo mode")
     model = None
